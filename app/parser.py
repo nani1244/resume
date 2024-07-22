@@ -2,6 +2,7 @@ import spacy
 import re
 from pdfminer.high_level import extract_text
 import docx2txt
+from io import BytesIO
 
 # Load spaCy model
 nlp = spacy.load('en_core_web_sm')
@@ -11,7 +12,9 @@ PHONE_PATTERN = re.compile(r'\+?\d[\d -]{8,12}\d')
 EMAIL_PATTERN = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
 
 def extract_text_from_pdf(file):
-    return extract_text(file)
+    # Use BytesIO to handle file content as a file-like object
+    file_stream = BytesIO(file.read())
+    return extract_text(file_stream)
 
 def extract_text_from_docx(file):
     return docx2txt.process(file)
